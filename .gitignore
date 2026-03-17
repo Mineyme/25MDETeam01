@@ -1,0 +1,12 @@
+# 忽略数据文件（太大）
+data_raw/*.xlsx
+data_raw/*.csv
+data_clean/*.csv
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+*.log
+
+# 保留JSON配置文件
+!data_raw/missing_data_scraped.json
