@@ -11,7 +11,8 @@ import urllib3
 import os
 urllib3.disable_warnings()
 
-DATA_RAW = r"D:\Project\City_Budget_Analysis\data_raw"
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DATA_RAW = os.path.join(project_root, "data_raw")
 
 def fetch_city_data(indicator_code, indicator_name, period="LAST20"):
     """从国家统计局API获取主要城市年度数据"""

@@ -200,7 +200,8 @@ print(f"  储蓄存款余额: 272.12 亿元 (用户提供)")
 # ============================================================
 # 保存爬取结果
 # ============================================================
-output_path = os.path.join(r"D:\Project\City_Budget_Analysis\data_raw", "missing_data_scraped.json")
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+output_path = os.path.join(project_root,"data_raw", "missing_data_scraped.json")
 with open(output_path, 'w', encoding='utf-8') as f:
     json.dump(results, f, ensure_ascii=False, indent=2)
 
