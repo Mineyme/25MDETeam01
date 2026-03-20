@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>房地产开发投资与财政缺口分析</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .intro-box {
+            background: #f0f4ff;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .insight-box {
+            background: #fff4e6;
+            padding: 20px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .positive-insight {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+        }
+        
+        .conclusion-box {
+            background: #f3e5f5;
+            border-left-color: #9c27b0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        table thead {
+            background: #667eea;
+            color: white;
+        }
+        
+        table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        table tbody tr:hover {
+            background: #f5f7fa;
+        }
+        
+        table tbody tr:nth-child(even) {
+            background: #f9fafb;
+        }
+        
+        .highlight {
+            background-color: #fff9e6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+        
+        .metric-card {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin: 10px 10px 10px 0;
+            border-radius: 8px;
+            min-width: 220px;
+        }
+        
+        .metric-card .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .metric-card .value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        
+        .findings {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .finding-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .finding-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .source-note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #1565c0;
+        }
+        
+        .policy-rec {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #ff6f00;
+        }
+        
+        .footer {
+            background: #f5f5f5;
+            padding: 20px 40px;
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+            border-top: 1px solid #ddd;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .tooltip {
+            display: inline-block;
+            position: relative;
+            border-bottom: 1px dotted #667eea;
+            cursor: help;
+        }
+        
+        .key-number {
+            color: #ff6f00;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        @media (max-width: 768px) {
+            .findings {
+                grid-template-columns: 1fr;
+            }
+            
+            .metric-card {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 房地产开发投资与财政缺口分析</h1>
+            <p>Real Estate Investment and Fiscal Gap Analysis</p>
+        </div>
+        
+        <div class="content">
+            <!-- 第一部分：分析概述 -->
+            <div class="section">
+                <h2>📋 分析概述</h2>
+                <div class="intro-box">
+                    <h3>分析目标</h3>
+                    <p>分析房地产开发投资完成额与 gap_to_gdp 的时序相关性、地区差异，探究投资驱动型城市的财政特征，为地方政府财政可持续性评估提供数据依据。</p>
+                </div>
+                
+                <h3>分析内容</h3>
+                <ul>
+                    <li><strong>投资强度 vs gap_to_gdp 热力图分析</strong>：26个城市2006-2025年投资与财政缺口的时空分布特征</li>
+                    <li><strong>城市群滞后效应分析</strong>：长三角、珠三角、京津冀、成渝四大城市群的投资-财政关系演化</li>
+                    <li><strong>投资增速与财政缺口增速交叉分析</strong>：2006-2025年经济周期内的增速动态</li>
+                    <li><strong>机制分析与政策启示</strong>：房地产投资影响财政的三条路径和差异化调控建议</li>
+                </ul>
+                
+                <h3>数据来源</h3>
+                <p style="color: #1565c0; font-weight: 500;">
+                    📁 来源文件：<strong>06_re_invest_gap_to_GDP_analysis.ipynb</strong><br>
+                    📊 数据集：city_budget_clean.csv, real_estate_clean.csv<br>
+                    📅 时间范围：2006-2025年 (20年)<br>
+                    🏙️ 城市数量：26个一二线城市
+                </p>
+            </div>
+            
+            <!-- 第二部分：主要发现 -->
+            <div class="section">
+                <h2>🔍 主要发现</h2>
+                
+                <h3>发现1：投资强度与财政缺口的<span class="key-number">高度分化</span></h3>
+                
+                <div class="insight-box">
+                    <strong>核心数据：</strong>
+                    <ul>
+                        <li>26个完整数据城市中：<span class="key-number">14个正相关</span>、<span class="key-number">12个负相关</span></li>
+                        <li>平均相关系数：<span class="key-number">0.023</span>（接近零），说明关系高度分化</li>
+                        <li>房地产投资与财政平衡的关系<strong>因城而异</strong>，不能一刀切</li>
+                    </ul>
+                </div>
+                
+                <h3>关键城市特征对比</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="3" style="background: #ff6f00; color: white;">负相关最强城市（投资缓解财政压力）</th>
+                        </tr>
+                        <tr>
+                            <th>排名</th>
+                            <th>城市</th>
+                            <th style="width: 30%;">相关系数</th>
+                            <th>特征解读</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><strong>北京</strong></td>
+                            <td><span class="key-number">-0.716</span></td>
+                            <td>投资回报显著，有效补充财政收入</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><strong>合肥</strong></td>
+                            <td><span class="key-number">-0.679</span></td>
+                            <td>投资拉动效应明显</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><strong>沈阳</strong></td>
+                            <td><span class="key-number">-0.672</span></td>
+                            <td>投资对财政有正向贡献</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><strong>大连</strong></td>
+                            <td><span class="key-number">-0.520</span></td>
+                            <td>投资带动土地财政和税收</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><strong>武汉</strong></td>
+                            <td><span class="key-number">-0.498</span></td>
+                            <td>投资与财政良性互动</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="3" style="background: #f44336; color: white;">正相关最强城市（投资加剧财政压力）</th>
+                        </tr>
+                        <tr>
+                            <th>排名</th>
+                            <th>城市</th>
+                            <th style="width: 30%;">相关系数</th>
+                            <th>特征解读</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><strong>广州</strong></td>
+                            <td><span class="key-number">0.844</span></td>
+                            <td>高投资需大量财政配套</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><strong>郑州</strong></td>
+                            <td><span class="key-number">0.746</span></td>
+                            <td>投资驱动型，财政负担重</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><strong>青岛</strong></td>
+                            <td><span class="key-number">0.737</span></td>
+                            <td>基建投资扩大财政缺口</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><strong>宁波</strong></td>
+                            <td><span class="key-number">0.446</span></td>
+                            <td>投资增速快于财政增速</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><strong>济南</strong></td>
+                            <td><span class="key-number">0.432</span></td>
+                            <td>投资对财政短期压力显著</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>投资强度与财政压力的数值特征</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2" style="background: #667eea; color: white;">投资强度TOP 5</th>
+                            <th colspan="2" style="background: #764ba2; color: white;">财政缺口TOP 5</th>
+                        </tr>
+                        <tr>
+                            <th>城市</th>
+                            <th>投资占GDP</th>
+                            <th>城市</th>
+                            <th>缺口占GDP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>贵阳</td>
+                            <td><span class="key-number">27.05%</span></td>
+                            <td>重庆</td>
+                            <td><span class="key-number">9.57%</span></td>
+                        </tr>
+                        <tr>
+                            <td>昆明</td>
+                            <td><span class="key-number">26.17%</span></td>
+                            <td>哈尔滨</td>
+                            <td><span class="key-number">8.46%</span></td>
+                        </tr>
+                        <tr>
+                            <td>西安</td>
+                            <td><span class="key-number">24.60%</span></td>
+                            <td>长春</td>
+                            <td><span class="key-number">6.14%</span></td>
+                        </tr>
+                        <tr>
+                            <td>郑州</td>
+                            <td><span class="key-number">21.87%</span></td>
+                            <td>天津</td>
+                            <td><span class="key-number">5.81%</span></td>
+                        </tr>
+                        <tr>
+                            <td>合肥</td>
+                            <td><span class="key-number">21.54%</span></td>
+                            <td>贵阳</td>
+                            <td><span class="key-number">5.71%</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="insight-box positive-insight">
+                    <strong>⚡ 关键启示：</strong>
+                    高投资不一定带来高缺口。合肥投资强度高(21.54%)但相关系数为-0.679，说明投资有效缓解了财政压力；而长春、哈尔滨投资强度较低却有高缺口，反映东北地区产业结构调整的挑战。
+                </div>
+                
+                <hr style="border: none; border-top: 2px solid #eee; margin: 30px 0;">
+                
+                <h3>发现2：城市群滞后效应的<span class="key-number">显著差异</span></h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>城市群</th>
+                            <th>最大滞后</th>
+                            <th>滞后相关</th>
+                            <th>同期相关</th>
+                            <th>滞后特征</th>
+                            <th>财政自给率</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>长三角</strong></td>
+                            <td><span class="key-number">+5年</span></td>
+                            <td><span class="key-number">0.658</span></td>
+                            <td>0.390</td>
+                            <td>投资领先财政</td>
+                            <td><span class="key-number">93.25%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>珠三角</strong></td>
+                            <td><span class="key-number">-1年</span></td>
+                            <td><span class="key-number">0.832</span></td>
+                            <td>0.827</td>
+                            <td>财政领先投资</td>
+                            <td><span class="key-number">80.84%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>京津冀</strong></td>
+                            <td><span class="key-number">-5年</span></td>
+                            <td><span class="key-number">-0.880</span></td>
+                            <td>-0.173</td>
+                            <td>财政领先投资(负相关)</td>
+                            <td><span class="key-number">71.21%</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>成渝</strong></td>
+                            <td><span class="key-number">+5年</span></td>
+                            <td><span class="key-number">0.674</span></td>
+                            <td>-0.045</td>
+                            <td>投资领先财政</td>
+                            <td><span class="key-number">63.09%</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="insight-box">
+                    <strong>四大城市群的滞后效应解读：</strong>
+                    <ul>
+                        <li>🔸 <strong>长三角</strong>：投资领先5年，相关系数0.658，体现长期回报机制，财政健康度最好</li>
+                        <li>🔸 <strong>珠三角</strong>：财政领先1年，相关系数0.832，财政状况制约投资，财政约束明显</li>
+                        <li>🔸 <strong>京津冀</strong>：财政领先5年，高度负相关(-0.880)，转移支付主导，市场机制弱</li>
+                        <li>🔸 <strong>成渝</strong>：投资领先5年，相关系数0.674，发展中地区投资拉动明显，财政压力最大</li>
+                    </ul>
+                </div>
+                
+                <hr style="border: none; border-top: 2px solid #eee; margin: 30px 0;">
+                
+                <h3>发现3：投资增速与财政缺口增速的<span class="key-number">周期演变</span></h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>时期</th>
+                            <th>投资增速</th>
+                            <th>GDP增速</th>
+                            <th>缺口增速</th>
+                            <th>投资占GDP</th>
+                            <th>缺口占GDP</th>
+                            <th>经济背景</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>2007-2011</strong></td>
+                            <td><span class="key-number">24.37%</span></td>
+                            <td>17.97%</td>
+                            <td>22.94%</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>高速增长期</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2012-2014</strong></td>
+                            <td><span class="key-number">15.68%</span></td>
+                            <td>10.74%</td>
+                            <td>7.15%</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>增速换挡期</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2015-2017</strong></td>
+                            <td><span class="key-number">5.37%</span></td>
+                            <td>8.62%</td>
+                            <td>34.12%</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>结构调整期</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2018-2020</strong></td>
+                            <td><span class="key-number">7.50%</span></td>
+                            <td>6.33%</td>
+                            <td>16.54%</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>新常态期</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2021-2024</strong></td>
+                            <td><span class="key-number">-7.30%</span></td>
+                            <td>6.64%</td>
+                            <td>21.56%</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>疫后恢复期</td>
+                        </tr>
+                        <tr style="font-weight: bold; background: #f5f5f5;">
+                            <td><strong>2006-2012 平均</strong></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="key-number">15.63%</span></td>
+                            <td><span class="key-number">3.42%</span></td>
+                            <td>早期（健康）</td>
+                        </tr>
+                        <tr style="font-weight: bold; background: #f5f5f5;">
+                            <td><strong>2018-2025 平均</strong></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="key-number">14.75%</span></td>
+                            <td><span class="key-number">5.94%</span></td>
+                            <td>近期（压力）</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>增速周期的关键转折点</h3>
+                <ul>
+                    <li>📈 <strong>投资增速峰值</strong>：2010年(31.66%) → 4万亿刺激政策效应</li>
+                    <li>📉 <strong>投资增速谷值</strong>：2023年(-11.17%) → 房地产深度调整期</li>
+                    <li>📈 <strong>缺口增速峰值</strong>：2009年(1471.67%) → 全球金融危机冲击</li>
+                    <li>📉 <strong>缺口增速谷值</strong>：2017年(-31.21%) → 财政去杠杆成效</li>
+                </ul>
+                
+                <div class="insight-box conclusion-box">
+                    <strong>❗ 核心趋势：</strong>
+                    早期(2006-2012)实现"投资拉动增长且财政可控"，近期(2018-2025)陷入"投资下降但财政压力上升"的困境。投资占GDP从15.63%降至14.75%，而缺口占GDP却从3.42%升至5.94%，说明传统的"投资驱动"模式面临严峻挑战。
+                </div>
+            </div>
+            
+            <!-- 第三部分：机制分析 -->
+            <div class="section">
+                <h2>🔗 房地产投资影响财政的机制分析</h2>
+                
+                <p style="margin-bottom: 20px;">房地产投资通过以下三条路径影响地方财政平衡：</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>影响路径</th>
+                            <th>作用机制</th>
+                            <th>效果方向</th>
+                            <th>时滞特征</th>
+                            <th>实证证据</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>土地财政收入</strong></td>
+                            <td>土地出让金直接补充财政</td>
+                            <td>✅ 正向（缓解缺口）</td>
+                            <td>当期见效</td>
+                            <td>北京、合肥：投资↔财政负相关</td>
+                        </tr>
+                        <tr>
+                            <td><strong>税收拉动效应</strong></td>
+                            <td>房地产带动相关产业税收</td>
+                            <td>✅ 正向（缓解缺口）</td>
+                            <td>1-2年滞后</td>
+                            <td>长三角：5年滞后 r=0.658</td>
+                        </tr>
+                        <tr>
+                            <td><strong>支出扩大效应</strong></td>
+                            <td>配套基建支出增加</td>
+                            <td>❌ 负向（扩大缺口）</td>
+                            <td>1-3年滞后</td>
+                            <td>广州、郑州：投资↔财政正相关</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>两种典型模式对比</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>维度</th>
+                            <th style="background: #4caf50; color: white;">北京、合肥模式（良性循环）</th>
+                            <th style="background: #f44336; color: white;">广州、郑州模式（困难处境）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>典型城市</strong></td>
+                            <td>北京、合肥、沈阳、大连、武汉</td>
+                            <td>广州、郑州、青岛、宁波、济南</td>
+                        </tr>
+                        <tr>
+                            <td><strong>相关系数</strong></td>
+                            <td>负相关 (-0.5 ~ -0.7)</td>
+                            <td>正相关 (+0.4 ~ +0.8)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>机制特点</strong></td>
+                            <td>土地财政+税收拉动 > 支出扩大</td>
+                            <td>支出扩大 > 土地财政+税收拉动</td>
+                        </tr>
+                        <tr>
+                            <td><strong>财政表现</strong></td>
+                            <td>投资缓解财政压力</td>
+                            <td>投资加剧财政压力</td>
+                        </tr>
+                        <tr>
+                            <td><strong>政策含义</strong></td>
+                            <td>可适度鼓励房地产投资</td>
+                            <td>需严格控制投资规模</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 第四部分：政策启示 -->
+            <div class="section">
+                <h2>💡 政策启示与建议</h2>
+                
+                <div class="policy-rec">
+                    <h3>建议1：认识滞后效应，避免短视评价</h3>
+                    <ul>
+                        <li>当前的财政收支状况可能反映过去1-5年的投资决策结果</li>
+                        <li>长三角投资领先财政5年(r=0.658)，不能在年度评价中体现</li>
+                        <li><strong>政策行动</strong>：建立长期财政效应监测机制，建立滞后效应模型库，避免基于当期数据的错误决策</li>
+                    </ul>
+                </div>
+                
+                <div class="policy-rec">
+                    <h3>建议2：差异化调控，分类施策</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>城市类型</th>
+                                <th>典型城市</th>
+                                <th>主要特征</th>
+                                <th>政策建议</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>投资缓解型</strong></td>
+                                <td>北京、合肥、沈阳</td>
+                                <td>投资回报高，财政效益好</td>
+                                <td>✅ 适度鼓励房地产投资，发挥拉动作用</td>
+                            </tr>
+                            <tr>
+                                <td><strong>投资加剧型</strong></td>
+                                <td>广州、郑州、青岛</td>
+                                <td>财政配套压力大，缺口扩大</td>
+                                <td>⚠️ 严格控制投资规模，防范财政风险</td>
+                            </tr>
+                            <tr>
+                                <td><strong>财政约束型</strong></td>
+                                <td>珠三角多数城市</td>
+                                <td>财政状况制约投资，领先1年</td>
+                                <td>🔧 优先改善财政状况，增强投资能力</td>
+                            </tr>
+                            <tr>
+                                <td><strong>转移支付依赖型</strong></td>
+                                <td>京津冀多数城市</td>
+                                <td>中央支持主导，市场机制弱</td>
+                                <td>📊 优化转移支付机制，避免负向激励</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="policy-rec">
+                    <h3>建议3：优化财政结构，降低土地财政依赖</h3>
+                    <ul>
+                        <li><strong>现状问题</strong>：全国平均财政自给率仅70.67%，其他城市仅69.07%，土地财政依赖度高</li>
+                        <li><strong>趋势恶化</strong>：投资占GDP从15.63%降至14.75%，缺口占GDP却从3.42%升至5.94%</li>
+                        <li><strong>核心建议</strong>：
+                            <ul>
+                                <li>🎯 拓展财政收入来源（完善税收结构，发展产业税）</li>
+                                <li>🏗️ 降低对土地财政的路径依赖（3-5年转换计划）</li>
+                                <li>📈 建立房地产投资与财政平衡的预案机制</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="policy-rec" style="border-left-color: #2196f3;">
+                    <h3>建议4：一线城市经验推广，区域协同发展</h3>
+                    <ul>
+                        <li><strong>一线城市优势明显</strong>：
+                            <ul>
+                                <li>投资强度：11.02% vs 其他17.04% ↓</li>
+                                <li>财政缺口：2.49% vs 其他5.07% ↓</li>
+                                <li>财政自给率：83.45% vs 其他69.07% ↑</li>
+                            </ul>
+                        </li>
+                        <li><strong>启示</strong>：轻投资、高产出、财政可持续是高质量发展的标志</li>
+                        <li><strong>政策推荐</strong>：
+                            <ul>
+                                <li>建立跨城市的财政效应对标体系</li>
+                                <li>推广一线城市的产业优化和财政管理经验</li>
+                                <li>支持区域协同发展，实现投资效率的共同提升</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 第五部分：总结 -->
+            <div class="section">
+                <h2>📌 综合结论</h2>
+                
+                <div class="conclusion-box" style="padding: 25px;">
+                    <h3 style="color: #9c27b0; margin-bottom: 15px;">核心发现汇总</h3>
+                    
+                    <p style="line-height: 1.8; margin-bottom: 15px;">
+                        基于26个城市20年数据的实证分析，房地产投资与地方财政平衡呈现<strong>显著的时空分化特征</strong>：
+                    </p>
+                    
+                    <ul style="list-style-type: none; margin: 20px 0;">
+                        <li style="margin-bottom: 15px;">
+                            <strong style="color: #ff6f00;">📊 相关性分化</strong>：同一投资规模，在北京产生-0.716的负相关（缓解财政压力），在广州产生+0.844的正相关（加剧财政压力），体现因城施策的必要性
+                        </li>
+                        <li style="margin-bottom: 15px;">
+                            <strong style="color: #ff6f00;">⏱️ 滞后效应差异</strong>：长三角投资领先财政5年，珠三角财政领先投资1年，京津冀财政领先投资5年且负相关，反映不同发展阶段的财政运行规律
+                        </li>
+                        <li style="margin-bottom: 15px;">
+                            <strong style="color: #ff6f00;">📈 周期演变困境</strong>：2006-2012年期间"投资拉动增长、财政可控"，2018-2025年转变为"投资下降、财政压力上升"，说明传统模式面临挑战
+                        </li>
+                        <li style="margin-bottom: 15px;">
+                            <strong style="color: #ff6f00;">🎯 机制清晰</strong>：投资影响财政的三条路径（土地财政、税收、支出）净效应取决于城市经济结构和财政管理能力
+                        </li>
+                    </ul>
+                    
+                    <hr style="border: none; border-top: 2px solid rgba(255,107,0,0.3); margin: 20px 0;">
+                    
+                    <h3 style="color: #9c27b0; margin-top: 20px; margin-bottom: 15px;">对政策制定的启示</h3>
+                    
+                    <ol style="margin: 15px 20px; line-height: 1.8;">
+                        <li><strong>避免短视评价</strong>：建立基于滞后效应分析的长期财政评估机制，科学对待当期财政压力</li>
+                        <li><strong>实施分类调控</strong>：按城市特征采取差异化策略，促进投资对财政的积极贡献</li>
+                        <li><strong>优化财政结构</strong>：降低对土地财政的依赖，建立可持续的财政体系</li>
+                        <li><strong>推动区域协同</strong>：学习借鉴一线城市经验，实现投资效率和财政可持续性的共同提升</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- 数据来源说明 -->
+            <div class="source-note">
+                <strong>📁 数据来源说明</strong><br><br>
+                本分析报告的所有数据和发现均来源于笔记本文件：<br>
+                <code style="background: #fff; padding: 5px 8px; border-radius: 3px; color: #1565c0;">
+                    06_re_invest_gap_to_GDP_analysis.ipynb
+                </code><br><br>
+                
+                <strong>数据集来源：</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><code style="background: #fff; padding: 2px 5px; border-radius: 3px;">city_budget_clean.csv</code> - 地方财政数据（收入、支出、GDP等）</li>
+                    <li><code style="background: #fff; padding: 2px 5px; border-radius: 3px;">real_estate_clean.csv</code> - 房地产开发投资数据</li>
+                </ul>
+                
+                <strong>时间范围：</strong> 2006-2025年 (20年)<br>
+                <strong>城市数量：</strong> 26个一二线城市<br>
+                <strong>分析方法：</strong> 热力图分析、相关性分析、滞后效应分析、增速对比分析<br><br>
+                
+                <strong>⚠️ 重要说明：</strong> 本HTML报告引用原笔记本的分析内容、数据和结论，但没有修改原笔记本文件，保证数据完整性和真实性。
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>房地产开发投资与财政缺口分析报告 | Generated from 06_re_invest_gap_to_GDP_analysis.ipynb</p>
+            <p style="margin-top: 10px; color: #ccc;">Last Updated: 2026-03-20</p>
+        </div>
+    </div>
+</body>
+</html>
