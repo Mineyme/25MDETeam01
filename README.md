@@ -291,17 +291,7 @@ City_Budget_Analysis/
 │   ├── city_budget_clean.csv      # 财政数据（清洗后）
 │   ├── real_estate_clean.csv      # 房地产数据（清洗后）
 │   └── city_all_clean.csv         # 完整合并数据
-├── output/                         # 输出图表
-│   ├── gap_to_gdp_extremes.xlsx/.png
-│   ├── tier1_comparison.png
-│   ├── pearl_vs_yangtze.png
-│   ├── gap_to_gdp_distribution.png
-│   ├── growth_rate_analysis.png
-│   ├── gap_to_gdp_ranking_2022.png
-│   ├── real_estate_gap_analysis.png
-│   ├── pearl_yangtze_real_estate.png
-│   └── real_estate_time_series.png
-├── analysis_visual_report_html/           # 分析可视化HTML报告
+├── output/           # 分析可视化HTML报告
 │   ├── 02_Fiscal_Gap_Profile_Analysis.html
 │   ├── 03_T1_city_gap_to_GDP_analysis.html
 │   ├── 03_T2_region_gap_to_GDP_analysis.html
@@ -309,8 +299,8 @@ City_Budget_Analysis/
 │   ├── 03_T4_re_invest_gap_to_GDP_analysis.html
 │   └── 03_T5_fiscal_savings_gap_analysis.html
 ├── README.md                       # 项目说明文档
-├── 01_data_clean.ipynb            # 数据清洗笔记本
-├── 02_Fiscal_Gap_Profile_Analysis.ipynb # 财政缺口分析笔记本
+├── 01_data_clean.ipynb            # 数据清洗
+├── 02_Fiscal_Gap_Profile_Analysis.ipynb # 财政缺口分析
 ├── 03_T1_city_gap_to_GDP_analysis.ipynb # 一线城市分析
 ├── 03_T2_region_gap_to_GDP_analysis.ipynb # 区域对比分析
 ├── 03_T3_fiscal_real_estate_analysis.ipynb # 房地产分析
@@ -319,6 +309,7 @@ City_Budget_Analysis/
 ```
 
 ---
+
 
 # 六、技术栈和复现说明
 
