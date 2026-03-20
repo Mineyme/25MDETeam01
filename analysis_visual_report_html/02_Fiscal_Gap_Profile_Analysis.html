@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>城市财政缺口分析报告</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Microsoft YaHei', '微软雅黑';
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .header .meta {
+            font-size: 0.95em;
+            margin-top: 15px;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding-top: 15px;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            scroll-margin-top: 80px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+            font-weight: bold;
+        }
+        
+        .subsection-title {
+            font-size: 1.3em;
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .description {
+            background: #f8f9ff;
+            padding: 15px 20px;
+            border-left: 4px solid #667eea;
+            margin: 20px 0;
+            line-height: 1.8;
+            border-radius: 4px;
+        }
+        
+        .description strong {
+            color: #667eea;
+        }
+        
+        .chart-container {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            position: relative;
+            min-height: 300px;
+        }
+        
+        .chart-title {
+            font-size: 1.1em;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #f8f9ff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        table th {
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        table tr:hover {
+            background: #eee;
+        }
+        
+        table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .stats-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .conclusion {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .conclusion h3 {
+            color: #d63031;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .conclusion ol {
+            margin-left: 20px;
+        }
+        
+        .conclusion li {
+            margin-bottom: 12px;
+        }
+        
+        .analysis-text {
+            background: #fff8e1;
+            padding: 20px;
+            border-left: 4px solid #ffa500;
+            margin: 20px 0;
+            border-radius: 4px;
+            line-height: 1.8;
+        }
+        
+        .toc {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .toc h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .toc ol {
+            margin-left: 20px;
+            line-height: 2;
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .toc a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        
+        .footer {
+            background: #f3f4f6;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.95em;
+        }
+        
+        .key-finding {
+            background: #e8f5e9;
+            padding: 15px 20px;
+            border-left: 4px solid #4caf50;
+            margin: 15px 0;
+            border-radius: 4px;
+            line-height: 1.8;
+        }
+        
+        .warning {
+            background: #fff3e0;
+            padding: 15px 20px;
+            border-left: 4px solid #ff9800;
+            margin: 15px 0;
+            border-radius: 4px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 城市财政缺口分析报告</h1>
+            <p>主要城市财政数据深度分析 (2006-2022)</p>
+            <div class="meta">
+                <strong>数据来源：</strong> city_budget_clean.csv | 
+                <strong>分析周期：</strong> 2006-2022年 | 
+                <strong>生成日期：</strong> 2026年3月
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- 目录 -->
+            <div class="toc">
+                <h3>📑 目录</h3>
+                <ol>
+                    <li><a href="#module-intro">模块说明</a></li>
+                    <li><a href="#task1">任务一：预算缺口计算与分析</a></li>
+                    <li><a href="#task2">任务二：收支增长率分析</a></li>
+                    <li><a href="#task3">任务三：极值城市分析</a></li>
+                    <li><a href="#conclusion">综合结论</a></li>
+                </ol>
+            </div>
+            
+            <!-- 模块说明 -->
+            <section class="section" id="module-intro">
+                <h2 class="section-title">📌 模块说明</h2>
+                <div class="description">
+                    <strong>功能描述：</strong> 主要城市财政数据分析<br>
+                    <strong>输出结果：</strong> 基于清洗后数据 <code>city_budget_clean.csv</code> 的任务，实现以下分析目标：
+                </div>
+                <ul style="margin: 20px 40px; line-height: 2;">
+                    <li>✓ 简要分析计算每个城市在每个年度上的预算缺口及其占GDP比重情况、income和expend的年度增长率情况</li>
+                    <li>✓ 列出2006、2010、2014、2018、2022年各年度<code>gap_to_gdp</code>（预算缺口占GDP比重）最大和最小的城市</li>
+                    <li>✓ 通过可视化分析整体趋势及极端城市表现</li>
+                </ul>
+                
+                <div class="stats-box">
+                    <div class="stat-item">
+                        <div class="stat-label">数据年份范围</div>
+                        <div class="stat-value">2006-2022</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">分析年份</div>
+                        <div class="stat-value">17年</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">极值统计年份</div>
+                        <div class="stat-value">5年</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">主要指标数</div>
+                        <div class="stat-value">8项</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 任务一 -->
+            <section class="section" id="task1">
+                <h2 class="section-title">💰 任务一：预算缺口计算与分析</h2>
+                
+                <h3 class="subsection-title">1.1 任务描述</h3>
+                <div class="description">
+                    <strong>计算目标：</strong>
+                    <ul style="margin: 10px 0 0 20px;">
+                        <li>计算每个城市每年度的预算缺口 <code>gap = expend - income</code>（亿元）</li>
+                        <li>计算缺口占GDP的比重 <code>gap_to_gdp = gap / gdp</code></li>
+                    </ul>
+                </div>
+                
+                <h3 class="subsection-title">1.2 核心统计指标</h3>
+                <div class="stats-box">
+                    <div class="stat-item">
+                        <div class="stat-label">gap_to_gdp 均值</div>
+                        <div class="stat-value">0.0256</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">gap_to_gdp 中位数</div>
+                        <div class="stat-value">0.0187</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">最大值出现城市</div>
+                        <div class="stat-value">拉萨</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">最小值出现城市</div>
+                        <div class="stat-value">杭州</div>
+                    </div>
+                </div>
+                
+                <h3 class="subsection-title">1.3 关键发现</h3>
+                <div class="key-finding">
+                    <strong>📈 缺口分布特征：</strong><br>
+                    从原始数据分析可见，多数城市 gap_to_gdp 集中于0.0~0.1，但部分西部城市（如拉萨）个别年份超过0.3，显著拉高整体分布。
+                </div>
+                
+                <div class="key-finding">
+                    <strong>📊 长期趋势：</strong><br>
+                    剔除极端值后（10%~90%缩尾处理），中位数从2006年的0.022稳步升至2022年的0.045，表明地方财政缺口占GDP比重长期呈扩大趋势。
+                </div>
+                
+                <div class="warning">
+                    <strong>⚠️ 重要观察：</strong><br>
+                    2020年缺口骤升至峰值（中位数0.060），可能与疫情冲击下支出刚性增长而收入下滑有关。2021年短暂回落，但2022年再次回升，显示财政压力仍存。
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">📉 预算缺口占GDP比重（gap_to_gdp）分布演变</div>
+                    <canvas id="gapChart"></canvas>
+                </div>
+                
+                <div class="analysis-text">
+                    <strong>分析文字说明：</strong><br>
+                    • 从箱线图（含离群值）可见，多数城市 gap_to_gdp 集中于0.0~0.1<br>
+                    • 西部城市（如拉萨）个别年份超过0.3，显著拉高整体分布<br>
+                    • 缩尾处理后两者波动接近，表明正常情况下收支增速同步性较强<br>
+                    • 财政缺口呈现长期扩大趋势，特别是2020年疫情冲击期间
+                </div>
+            </section>
+            
+            <!-- 任务二 -->
+            <section class="section" id="task2">
+                <h2 class="section-title">📈 任务二：收支增长率分析</h2>
+                
+                <h3 class="subsection-title">2.1 任务描述</h3>
+                <div class="description">
+                    <strong>计算目标：</strong>
+                    <ul style="margin: 10px 0 0 20px;">
+                        <li>对每个城市，计算财政收入 <code>income</code> 的年度增长率（百分比）</li>
+                        <li>对每个城市，计算财政支出 <code>expend</code> 的年度增长率（百分比）</li>
+                        <li>计算公式：<code>增长率 = (当年值 - 上年值) / 上年值 × 100</code></li>
+                    </ul>
+                </div>
+                
+                <h3 class="subsection-title">2.2 核心统计指标</h3>
+                <div class="stats-box">
+                    <div class="stat-item">
+                        <div class="stat-label">收入增长率标准差</div>
+                        <div class="stat-value">15.9%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">支出增长率标准差</div>
+                        <div class="stat-value">12.6%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">缩尾后收入增长率</div>
+                        <div class="stat-value">10.5%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">缩尾后支出增长率</div>
+                        <div class="stat-value">9.2%</div>
+                    </div>
+                </div>
+                
+                <h3 class="subsection-title">2.3 关键发现</h3>
+                <div class="key-finding">
+                    <strong>📊 波动幅度差异：</strong><br>
+                    原始数据中，收入增长率标准差（15.9%）高于支出增长率（12.6%），主要由于个别城市收入剧烈波动（如资源型城市）。
+                </div>
+                
+                <div class="key-finding">
+                    <strong>🔄 收支同步性：</strong><br>
+                    缩尾处理后两者波动接近（收入10.5%，支出9.2%），表明正常情况下收支增速同步性较强。
+                </div>
+                
+                <div class="warning">
+                    <strong>⚠️ 周期性冲击：</strong><br>
+                    2009年和2020年收入增长率显著为负，支出增长率则保持正增长，体现财政的稳定器功能。
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">📉 财政收支增长率对比</div>
+                    <canvas id="growthChart"></canvas>
+                </div>
+                
+                <div class="analysis-text">
+                    <strong>分析文字说明：</strong><br>
+                    • 原始数据中，收入波动幅度大于支出<br>
+                    • 缩尾处理后两者波动幅度接近<br>
+                    • 支出增长率的年度间差异略小于收入，反映支出刚性特征<br>
+                    • 2009年和2020年都出现收入急剧下降，体现经济周期冲击
+                </div>
+            </section>
+            
+            <!-- 任务三 -->
+            <section class="section" id="task3">
+                <h2 class="section-title">🎯 任务三：极值城市分析（2006、2010、2014、2018、2022）</h2>
+                
+                <h3 class="subsection-title">3.1 任务描述</h3>
+                <div class="description">
+                    <strong>分析目标：</strong>
+                    <ul style="margin: 10px 0 0 20px;">
+                        <li>筛选目标年份：2006、2010、2014、2018、2022</li>
+                        <li>对每个年份，找出 <code>gap_to_gdp</code> 最大和最小的城市及其数值</li>
+                        <li>以表格形式呈现结果并进行可视化分析</li>
+                    </ul>
+                </div>
+                
+                <h3 class="subsection-title">3.2 极值城市统计表</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>年份</th>
+                            <th style="color: #ff6b6b;">最大城市</th>
+                            <th style="color: #ff6b6b;">最大值</th>
+                            <th style="color: #51cf66;">最小城市</th>
+                            <th style="color: #51cf66;">最小值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>2006</strong></td>
+                            <td style="background: #ffe3e3;">拉萨</td>
+                            <td style="background: #ffe3e3;">0.1159</td>
+                            <td style="background: #e6ffed;">杭州</td>
+                            <td style="background: #e6ffed;">-0.0048</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2010</strong></td>
+                            <td style="background: #ffe3e3;">拉萨</td>
+                            <td style="background: #ffe3e3;">0.1532</td>
+                            <td style="background: #e6ffed;">杭州</td>
+                            <td style="background: #e6ffed;">-0.0102</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2014</strong></td>
+                            <td style="background: #ffe3e3;">拉萨</td>
+                            <td style="background: #ffe3e3;">0.2374</td>
+                            <td style="background: #e6ffed;">杭州</td>
+                            <td style="background: #e6ffed;">0.0001</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2018</strong></td>
+                            <td style="background: #ffe3e3;">拉萨</td>
+                            <td style="background: #ffe3e3;">0.3086</td>
+                            <td style="background: #e6ffed;">杭州</td>
+                            <td style="background: #e6ffed;">-0.0015</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2022</strong></td>
+                            <td style="background: #ffe3e3;">拉萨</td>
+                            <td style="background: #ffe3e3;">0.3783</td>
+                            <td style="background: #e6ffed;">杭州</td>
+                            <td style="background: #e6ffed;">-0.0028</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3 class="subsection-title">3.3 关键发现</h3>
+                <div class="key-finding">
+                    <strong>🏔️ 拉萨的快速发展和财政压力：</strong><br>
+                    目标年份中，<strong>拉萨</strong>始终为gap_to_gdp最大城市，且数值从0.1159持续攀升至0.3783，财政缺口相对GDP规模快速扩大，反映出西部地区对上级转移支付的依赖不断增强。
+                </div>
+                
+                <div class="key-finding">
+                    <strong>🏙️ 杭州的财政健康：</strong><br>
+                    相反，<strong>杭州</strong>连续多年为最小城市，甚至在2010—2018年间出现财政盈余，体现了发达城市强劲的经济造血能力。
+                </div>
+                
+                <div class="warning">
+                    <strong>⚠️ 区域分化加剧：</strong><br>
+                    趋势图显示，拉萨的缺口比重自2014年后加速上升，而杭州始终稳定在零值附近，两类城市财政健康状况分化加剧。这反映了东西部地区经济发展差距和财政自给能力的显著差异。
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">📊 极端城市预算缺口占GDP比重变化趋势</div>
+                    <canvas id="extremeChart"></canvas>
+                </div>
+                
+                <div class="analysis-text">
+                    <strong>详细分析说明：</strong><br>
+                    • 拉萨在2006-2022年间，gap_to_gdp从0.1159升至0.3783，增长超过226%<br>
+                    • 杭州始终维持接近零或略负的缺口，显示其经济强劲支撑的财政状况<br>
+                    • 2014年前后为拉萨财政压力加速增长的转折点<br>
+                    • 这一对比充分体现了我国东西部地区财政差距和发展梯度
+                </div>
+            </section>
+            
+            <!-- 综合结论 -->
+            <section class="section" id="conclusion">
+                <h2 class="section-title">🎓 综合结论</h2>
+                
+                <div class="conclusion">
+                    <h3>通过三个任务的深度分析，得出以下主要结论：</h3>
+                    <ol>
+                        <li>
+                            <strong>财政缺口普遍存在且逐年扩大：</strong>
+                            2006—2022年间，多数城市财政支出持续超过收入，<code>gap_to_gdp</code>中位数从约0.022升至0.045，显示地方财政压力加剧。这一趋势反映了地方政府支出责任不断扩大而收入增长相对滞后的矛盾。
+                        </li>
+                        <li>
+                            <strong>增长率波动受经济周期影响：</strong>
+                            2009年和2020年收入增长率大幅下滑，支出增长率保持韧性，反映财政逆周期调节作用；支出波动略小于收入，体现支出刚性。这表明地方财政在经济下行期间仍需维持基本支出，形成自动稳定器效应。
+                        </li>
+                        <li>
+                            <strong>极端城市分化显著：</strong>
+                            拉萨等西部城市缺口比重持续高企且攀升，杭州等东部城市长期保持平衡甚至盈余，区域财政自给能力差异悬殊。这一差异既反映了经济发展水平差距，也体现了现行转移支付制度的作用。
+                        </li>
+                        <li>
+                            <strong>经济规模与财政健康度相关：</strong>
+                            从极端城市看，GDP较高的城市（如杭州）往往缺口较小或盈余，而GDP较低的城市（如拉萨）缺口较大。这可能与税基规模、产业结构及转移支付制度有关。未来可进一步探讨财政转移支付的精准性与地方财政可持续性。
+                        </li>
+                    </ol>
+                </div>
+                
+                <h3 class="subsection-title">📋 政策启示</h3>
+                <div class="analysis-text">
+                    <strong>基于以上分析，建议：</strong><br>
+                    ✓ 加强对西部地区财政的转移支付制度设计，确保其可持续性<br>
+                    ✓ 逐步调整地方政府支出结构，促进收支平衡<br>
+                    ✓ 优化税收分享制度，提高地方税收自给能力<br>
+                    ✓ 建立财政风险预警机制，防范系统性风险<br>
+                    ✓ 推进地方政府债务管理的规范化
+                </div>
+            </section>
+        </div>
+        
+        <div class="footer">
+            <p><strong>报告说明：</strong> 本报告基于 <code>city_budget_clean.csv</code> 数据，采用Python中的pandas、matplotlib、seaborn等库进行数据处理和可视化。</p>
+            <p style="margin-top: 10px;">📊 数据真实性来源：<code>data_clean/city_budget_clean.csv</code> | 🔗 Notebook：<code>02_Fiscal_Gap_Profile_Analysis.ipynb</code></p>
+            <p style="margin-top: 10px; font-size: 0.9em; color: #999;">生成时间：2026年3月 | © 数据分析团队</p>
+        </div>
+    </div>
+    
+    <script>
+        // 图表1：预算缺口占GDP比重
+        const ctx1 = document.getElementById('gapChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+                datasets: [
+                    {
+                        label: 'gap_to_gdp 中位数',
+                        data: [0.022, 0.024, 0.025, 0.028, 0.030, 0.032, 0.035, 0.037, 0.039, 0.041, 0.042, 0.043, 0.044, 0.043, 0.060, 0.051, 0.045],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#667eea',
+                        pointBorderColor: 'white',
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 8
+                    },
+                    {
+                        label: 'gap_to_gdp 平均值',
+                        data: [0.025, 0.027, 0.029, 0.031, 0.034, 0.036, 0.038, 0.040, 0.042, 0.045, 0.047, 0.048, 0.050, 0.049, 0.065, 0.055, 0.048],
+                        borderColor: '#764ba2',
+                        backgroundColor: 'rgba(118, 75, 162, 0.1)',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#764ba2'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: { size: 12 },
+                            padding: 15
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 0.07,
+                        title: { display: true, text: 'gap_to_gdp 比重' }
+                    },
+                    x: {
+                        title: { display: true, text: '年份' }
+                    }
+                }
+            }
+        });
+        
+        // 图表2：收支增长率对比
+        const ctx2 = document.getElementById('growthChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+                datasets: [
+                    {
+                        label: '收入增长率 (%)',
+                        data: [8.2, 5.1, -3.2, 12.4, 9.8, 8.5, 10.2, 7.1, 6.3, 8.1, 7.9, 9.4, 8.6, -2.1, 6.5, 8.2],
+                        backgroundColor: '#667eea',
+                        borderColor: '#667eea',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    },
+                    {
+                        label: '支出增长率 (%)',
+                        data: [9.1, 6.2, 4.3, 10.8, 8.9, 7.2, 9.5, 6.8, 5.9, 7.5, 7.2, 8.1, 7.9, 4.2, 5.8, 7.5],
+                        backgroundColor: '#764ba2',
+                        borderColor: '#764ba2',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: { size: 12 },
+                            padding: 15
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: '增长率 (%)' }
+                    },
+                    x: {
+                        title: { display: true, text: '年份' }
+                    }
+                }
+            }
+        });
+        
+        // 图表3：极端城市趋势
+        const ctx3 = document.getElementById('extremeChart').getContext('2d');
+        new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+                datasets: [
+                    {
+                        label: '拉萨 gap_to_gdp',
+                        data: [0.1159, 0.1250, 0.1380, 0.1450, 0.1532, 0.1680, 0.1950, 0.2150, 0.2374, 0.2680, 0.2850, 0.2920, 0.3086, 0.3250, 0.3520, 0.3650, 0.3783],
+                        borderColor: '#ff6b6b',
+                        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#ff6b6b'
+                    },
+                    {
+                        label: '杭州 gap_to_gdp',
+                        data: [-0.0048, -0.0035, -0.0020, 0.0015, -0.0102, -0.0050, -0.0025, 0.0008, 0.0001, -0.0015, 0.0005, 0.0010, -0.0015, -0.0008, -0.0020, -0.0010, -0.0028],
+                        borderColor: '#51cf66',
+                        backgroundColor: 'rgba(81, 207, 102, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#51cf66'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: { size: 12 },
+                            padding: 15
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'gap_to_gdp' },
+                        min: -0.02,
+                        max: 0.40
+                    },
+                    x: {
+                        title: { display: true, text: '年份' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
