@@ -16,7 +16,7 @@ ex_Team01 中国主要城市公共预算支出和收入数据分析
 - **国家统计局** - 主要城市年度数据
   - 网址: https://data.stats.gov.cn/easyquery.htm?cn=E0105
   - 路径: 首页 >> 地区数据 >> 主要城市年度数据
-  - 获取方式: 通过API接口自动化获取
+  - 获取方式: 通过爬虫自动化获取
 
 ### 2.补充数据源与补全说明
 国家统计局数据存在部分缺失，通过以下渠道补全：
@@ -147,9 +147,7 @@ City_Budget_Analysis/
 
 ### 1. 数据获取
 ```bash
-python codes/fetch_data.py          # 从国家统计局获取数据
-python codes/scrape_missing_data.py # 爬取缺失数据
-python codes/fill_missing_data.py   # 补全数据
+python codes/raw_data_get.py
 ```
 
 ### 2. 数据分析
