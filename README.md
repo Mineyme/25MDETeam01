@@ -2,7 +2,7 @@
 
 ![](https://img.shields.io/badge/Language-Python-blue) ![](https://img.shields.io/badge/Status-Active-green) ![](https://img.shields.io/badge/License-Academic-orange)
 
-**项目选题：** T2 - 中国主要城市公共预算支出和收入数据分析  
+**项目选题：** T2 - 中国城市财政赤字分析  
 **班级：** 25MDE PC  
 **组号：** G1  
 **组员：** 钟梅（组长）、王海林、王晓航、吴惠彪、梁小婵、梁佩文、章翔宇、曾铮  
